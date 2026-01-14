@@ -1,0 +1,43 @@
+<<<<<<< HEAD
+# PyAirgeddon - Python Wireless Security Auditing Tool
+# Requirements file for pip installation
+# Usage: pip install -r requirements.txt
+
+# Core Dependencies (Required)
+scapy>=2.5.0              # Packet manipulation library
+
+# Optional Dependencies (Enhanced functionality)
+netifaces>=0.11.0         # Network interface information
+
+# Note: This tool also requires external system tools:
+# - aircrack-ng suite (airmon-ng, airodump-ng, aireplay-ng, aircrack-ng)
+# - hostapd (for Evil Twin AP)
+# - dnsmasq (for DHCP/DNS in Evil Twin)
+# - hcxdumptool, hcxpcapngtool (for PMKID capture)
+# - hashcat (for GPU-accelerated cracking)
+#
+# On Debian/Ubuntu: sudo apt install aircrack-ng hostapd dnsmasq hcxtools hashcat
+# On Fedora/RHEL:   sudo dnf install aircrack-ng hostapd dnsmasq hcxtools hashcat
+# On Arch Linux:    sudo pacman -S aircrack-ng hostapd dnsmasq hcxtools hashcat
+=======
+# PyAirgeddon - Python Wireless Security Auditing Tool
+# Requirements file for pip installation
+# Usage: pip install -r requirements.txt
+
+# Core Dependencies (Required)
+scapy>=2.5.0              # Packet manipulation library
+
+# Optional Dependencies (Enhanced functionality)
+netifaces>=0.11.0         # Network interface information
+
+# Note: This tool also requires external system tools:
+# - aircrack-ng suite (airmon-ng, airodump-ng, aireplay-ng, aircrack-ng)
+# - hostapd (for Evil Twin AP)
+# - dnsmasq (for DHCP/DNS in Evil Twin)
+# - hcxdumptool, hcxpcapngtool (for PMKID capture)
+# - hashcat (for GPU-accelerated cracking)
+#
+# On Debian/Ubuntu: sudo apt install aircrack-ng hostapd dnsmasq hcxtools hashcat
+# On Fedora/RHEL:   sudo dnf install aircrack-ng hostapd dnsmasq hcxtools hashcat
+# On Arch Linux:    sudo pacman -S aircrack-ng hostapd dnsmasq hcxtools hashcat
+>>>>>>> 7a1df55f49f3097f4e39d6a09d98fe1482ca394e
