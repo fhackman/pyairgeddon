@@ -1,43 +1,78 @@
-<<<<<<< HEAD
 # PyAirgeddon - Python Wireless Security Auditing Tool
-# Requirements file for pip installation
+# Red Team Edition - Requirements file for pip installation
 # Usage: pip install -r requirements.txt
 
-# Core Dependencies (Required)
+# ============================================================================
+# CORE DEPENDENCIES (Required)
+# ============================================================================
 scapy>=2.5.0              # Packet manipulation library
 
-# Optional Dependencies (Enhanced functionality)
+# ============================================================================
+# ENHANCED DEPENDENCIES (Recommended)
+# ============================================================================
 netifaces>=0.11.0         # Network interface information
+requests>=2.28.0          # HTTP requests for online lookups
 
-# Note: This tool also requires external system tools:
+# ============================================================================
+# RED TEAM ADDITIONS
+# ============================================================================
+cryptography>=39.0.0      # HTTPS portal certificates, encryption
+rich>=13.0.0              # Enhanced terminal output with colors/tables
+colorama>=0.4.6           # Cross-platform terminal colors
+
+# ============================================================================
+# OPTIONAL DEPENDENCIES
+# ============================================================================
+# Uncomment if needed:
+# pycryptodome>=3.17.0    # Additional crypto algorithms
+# netaddr>=0.8.0          # Network address manipulation
+# paramiko>=3.0.0         # SSH client for remote operations
+# python-nmap>=0.7.1      # Nmap integration
+
+# ============================================================================
+# SYSTEM TOOLS REQUIRED (External - install via package manager)
+# ============================================================================
+# Core Tools (Required):
 # - aircrack-ng suite (airmon-ng, airodump-ng, aireplay-ng, aircrack-ng)
-# - hostapd (for Evil Twin AP)
-# - dnsmasq (for DHCP/DNS in Evil Twin)
-# - hcxdumptool, hcxpcapngtool (for PMKID capture)
-# - hashcat (for GPU-accelerated cracking)
+# - iw (wireless configuration)
+# - iwconfig (legacy wireless config)
 #
-# On Debian/Ubuntu: sudo apt install aircrack-ng hostapd dnsmasq hcxtools hashcat
-# On Fedora/RHEL:   sudo dnf install aircrack-ng hostapd dnsmasq hcxtools hashcat
-# On Arch Linux:    sudo pacman -S aircrack-ng hostapd dnsmasq hcxtools hashcat
-=======
-# PyAirgeddon - Python Wireless Security Auditing Tool
-# Requirements file for pip installation
-# Usage: pip install -r requirements.txt
-
-# Core Dependencies (Required)
-scapy>=2.5.0              # Packet manipulation library
-
-# Optional Dependencies (Enhanced functionality)
-netifaces>=0.11.0         # Network interface information
-
-# Note: This tool also requires external system tools:
-# - aircrack-ng suite (airmon-ng, airodump-ng, aireplay-ng, aircrack-ng)
-# - hostapd (for Evil Twin AP)
-# - dnsmasq (for DHCP/DNS in Evil Twin)
-# - hcxdumptool, hcxpcapngtool (for PMKID capture)
-# - hashcat (for GPU-accelerated cracking)
+# Evil Twin (Optional):
+# - hostapd (for rogue AP)
+# - dnsmasq (for DHCP/DNS)
+# - hostapd-mana (for MANA attacks) - https://github.com/sensepost/hostapd-mana
 #
-# On Debian/Ubuntu: sudo apt install aircrack-ng hostapd dnsmasq hcxtools hashcat
-# On Fedora/RHEL:   sudo dnf install aircrack-ng hostapd dnsmasq hcxtools hashcat
-# On Arch Linux:    sudo pacman -S aircrack-ng hostapd dnsmasq hcxtools hashcat
->>>>>>> 7a1df55f49f3097f4e39d6a09d98fe1482ca394e
+# PMKID Capture (Optional):
+# - hcxdumptool (for PMKID capture)
+# - hcxpcapngtool (for hashcat format conversion)
+#
+# Password Cracking (Optional):
+# - hashcat (GPU-accelerated cracking)
+# - john (John the Ripper)
+#
+# WPS Attacks (Optional):
+# - reaver
+# - bully
+#
+# DoS Attacks (Optional):
+# - mdk3 or mdk4
+#
+# Evasion (Optional):
+# - macchanger
+#
+# ============================================================================
+# INSTALLATION COMMANDS BY DISTRIBUTION
+# ============================================================================
+# Debian/Ubuntu/Kali:
+#   sudo apt update
+#   sudo apt install -y aircrack-ng hostapd dnsmasq hcxtools hashcat reaver bully mdk4 macchanger
+#
+# Fedora/RHEL:
+#   sudo dnf install -y aircrack-ng hostapd dnsmasq hcxtools hashcat
+#
+# Arch Linux:
+#   sudo pacman -S aircrack-ng hostapd dnsmasq hcxtools hashcat reaver bully mdk4
+#
+# For hostapd-mana (Kali/Debian):
+#   sudo apt install hostapd-mana
+#   # Or build from source: https://github.com/sensepost/hostapd-mana
