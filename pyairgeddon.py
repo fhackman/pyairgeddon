@@ -552,17 +552,34 @@ class PyAirgeddonGUI:
         self.create_log_tab()
         
         # Status bar
-        status_frame = tk.Frame(self.root, bg=COLORS['bg_panel'], height=30)
+        status_frame = tk.Frame(self.root, bg=COLORS['bg_panel'], height=40)
         status_frame.pack(fill='x', side='bottom')
+        status_frame.pack_propagate(False)  # Keep fixed height
         
+        # Status text on left
         self.status_var = tk.StringVar(value="Ready")
         tk.Label(status_frame, textvariable=self.status_var,
-            font=('Consolas', 9), fg=COLORS['text'], bg=COLORS['bg_panel']).pack(side='left', padx=10)
+            font=('Consolas', 9), fg=COLORS['text'], bg=COLORS['bg_panel']).pack(side='left', padx=10, pady=8)
         
-        # Progress bar
-        self.progress = ttk.Progressbar(status_frame, mode='determinate',
-            style='green.Horizontal.TProgressbar', length=200)
-        self.progress.pack(side='right', padx=10, pady=5)
+        # Progress section on right
+        progress_frame = tk.Frame(status_frame, bg=COLORS['bg_panel'])
+        progress_frame.pack(side='right', padx=10, pady=5)
+        
+        # Activity label (shows ▶ when active)
+        self.activity_var = tk.StringVar(value="")
+        self.activity_label = tk.Label(progress_frame, textvariable=self.activity_var,
+            font=('Consolas', 10, 'bold'), fg=COLORS['accent'], bg=COLORS['bg_panel'])
+        self.activity_label.pack(side='left', padx=5)
+        
+        # Progress bar - larger and more visible
+        self.progress = ttk.Progressbar(progress_frame, mode='determinate',
+            style='green.Horizontal.TProgressbar', length=300)
+        self.progress.pack(side='left', padx=5)
+        
+        # Percentage label
+        self.progress_pct = tk.StringVar(value="0%")
+        tk.Label(progress_frame, textvariable=self.progress_pct,
+            font=('Consolas', 9), fg=COLORS['text'], bg=COLORS['bg_panel'], width=5).pack(side='left')
         
     def create_scan_tab(self):
         """Create network scanning tab"""
@@ -963,6 +980,31 @@ class PyAirgeddonGUI:
     def update_status(self, message: str):
         """Update status bar"""
         self.status_var.set(message)
+    
+    def show_activity(self, message: str = "Processing..."):
+        """Show activity indicator"""
+        self.activity_var.set("▶")
+        self.status_var.set(message)
+        self.progress.configure(value=0)
+        self.progress_pct.set("0%")
+        self.root.update_idletasks()
+    
+    def hide_activity(self, message: str = "Ready"):
+        """Hide activity indicator"""
+        self.activity_var.set("")
+        self.status_var.set(message)
+        self.progress.configure(value=0)
+        self.progress_pct.set("")
+        self.root.update_idletasks()
+    
+    def update_progress(self, value: float, message: str = None):
+        """Update progress bar with percentage"""
+        value = min(100, max(0, value))  # Clamp to 0-100
+        self.progress.configure(value=value)
+        self.progress_pct.set(f"{int(value)}%")
+        if message:
+            self.status_var.set(message)
+        self.root.update_idletasks()
         
     def check_environment(self):
         """Check root and dependencies"""
@@ -1085,7 +1127,7 @@ class PyAirgeddonGUI:
         
         self.scan_btn.configure(state='disabled')
         self.stop_scan_btn.configure(state='normal')
-        self.update_status("Scanning...")
+        self.show_activity("Scanning networks...")
         
     def stop_scan(self):
         """Stop network scanning"""
@@ -1094,7 +1136,7 @@ class PyAirgeddonGUI:
             
         self.scan_btn.configure(state='normal')
         self.stop_scan_btn.configure(state='disabled')
-        self.update_status("Scan stopped")
+        self.hide_activity("Scan stopped")
         
     def update_network_list(self, networks, clients):
         """Update network tree with scan results"""
@@ -1130,6 +1172,7 @@ class PyAirgeddonGUI:
             self.deauth_attack.stop(log_callback=self.log)
             self.deauth_attack = None
             self.deauth_btn.configure(text="▶ Start Deauth", bg=COLORS['warning'])
+            self.hide_activity("Deauth stopped")
         else:
             if not self.selected_network:
                 messagebox.showwarning("Warning", "Select a target network first")
@@ -1146,12 +1189,14 @@ class PyAirgeddonGUI:
                 log_callback=self.log
             )
             self.deauth_btn.configure(text="■ Stop Deauth", bg=COLORS['success'])
+            self.show_activity("Deauth attack running...")
             
     def beacon_flood(self):
         """Start beacon flood attack"""
         self.dos_attack = DoSAttack(self.current_interface)
         self.dos_attack.beacon_flood(log_callback=self.log)
         self.dos_stop_btn.configure(state='normal')
+        self.show_activity("Beacon flood running...")
         
     def auth_flood(self):
         """Start auth flood attack"""
@@ -1162,6 +1207,7 @@ class PyAirgeddonGUI:
         self.dos_attack = DoSAttack(self.current_interface)
         self.dos_attack.auth_flood(self.selected_network.bssid, log_callback=self.log)
         self.dos_stop_btn.configure(state='normal')
+        self.show_activity("Auth flood running...")
         
     def stop_dos(self):
         """Stop DoS attack"""
@@ -1169,6 +1215,7 @@ class PyAirgeddonGUI:
             self.dos_attack.stop(log_callback=self.log)
             self.dos_attack = None
         self.dos_stop_btn.configure(state='disabled')
+        self.hide_activity("DoS stopped")
         
     def pixie_dust(self):
         """Run Pixie Dust attack"""
